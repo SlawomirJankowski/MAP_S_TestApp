@@ -42,10 +42,12 @@ namespace MAP_S_TestApp.Controllers
         public async Task<IActionResult> EditApplicationUser(ApplicationUser applicationUserModel)
         {
             ViewBag.UserName = GetLoggedUserName();
+            var editedApplicationUser = await _applicationUserRepository.GetUserByIdAsync(applicationUserModel.Id);
+
             if (!ModelState.IsValid)
                 return View("Register", applicationUserModel);
 
-            if (_applicationUserRepository.EmailAlreadyExists(applicationUserModel.Email))
+            if (_applicationUserRepository.EmailAlreadyExists(applicationUserModel.Email) && editedApplicationUser.Email != applicationUserModel.Email)
             {
                 ViewBag.Error = "Podany adres e-mail jest już używany.\nWprowadź inny adres e-mail.";
                 return View();
@@ -69,7 +71,6 @@ namespace MAP_S_TestApp.Controllers
             var claims = this.User.Claims.ToList();
             return $"{claims[1].Value} {claims[2].Value}";
         }
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

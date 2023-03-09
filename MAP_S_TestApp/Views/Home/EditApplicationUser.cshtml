@@ -8,7 +8,12 @@
         <div class="card card-border-top">
             <h3 class="card-header bg-transparent mt-3 pb-3 text-center">@ViewBag.Title</h3>
             <div class="card-body">
-
+                @if (!string.IsNullOrEmpty(ViewBag.Error))
+                {
+                    <div class="alert alert-primary my-2 text-center">
+                        <strong>@ViewBag.Error</strong>
+                    </div>
+                }
                 <form method="post">
                      
                     <div>
