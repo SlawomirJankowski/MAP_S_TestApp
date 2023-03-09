@@ -14,7 +14,7 @@ namespace MAP_S_TestApp.Controllers
     public class AccountController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private ApplicationUserRepository _applicationUserRepository;
+        private readonly ApplicationUserRepository _applicationUserRepository;
         public AccountController(ApplicationDbContext context)
         {
             _context = context;
@@ -56,8 +56,11 @@ namespace MAP_S_TestApp.Controllers
             await _applicationUserRepository.AddUserAsync(applicationUser);
 
             //TODO: sent confirmation email
-            var link = Url.ActionLink("AccountConfirmation", "Account", new { applicationUserId = applicationUser.Id, verificationToken = applicationUser.VerificationToken },      Request.Scheme, Request.Host.ToString());
+            var link = Url.ActionLink("AccountConfirmation", "Account", new { applicationUserId = applicationUser.Id, verificationToken = applicationUser.VerificationToken }, Request.Scheme, Request.Host.ToString());
 
+            var emailSender = new EmailHelper();
+            await emailSender.SendActivationLink(link, applicationUser.FirstName, applicationUser.LastName, applicationUser.Email);
+            
             return RedirectToAction("RegisterConfirmation");
         }
 

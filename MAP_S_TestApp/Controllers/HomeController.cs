@@ -1,5 +1,4 @@
 ﻿using MAP_S_TestApp.Data;
-using MAP_S_TestApp.Helpers;
 using MAP_S_TestApp.Models;
 using MAP_S_TestApp.Models.Domains;
 using MAP_S_TestApp.Models.ViewModels;
@@ -13,7 +12,7 @@ namespace MAP_S_TestApp.Controllers
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private ApplicationUserRepository _applicationUserRepository;
+        private readonly ApplicationUserRepository _applicationUserRepository;
 
         public HomeController(ApplicationDbContext context)
         {
@@ -64,7 +63,6 @@ namespace MAP_S_TestApp.Controllers
 
             return RedirectToAction("Index", "Home");
         }
-
 
         private string GetLoggedUserName()
         {
