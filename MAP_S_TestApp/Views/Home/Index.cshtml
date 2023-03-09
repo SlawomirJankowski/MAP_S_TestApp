@@ -1,0 +1,40 @@
+﻿@model MAP_S_TestApp.Models.ViewModels.AllApplicationUsersViewModel
+@{
+    ViewData["Title"] = "Lista użytkowników";
+}
+
+<div class="text-start">
+    <h1 class="display-4">Lista użytkowników</h1>
+    <hr />
+</div>
+<div>
+    <table class="table display table-hover table-striped mt-5 mb-5 text-center align-middle">
+        <thead class="table-success text-center dt-head-center">
+            <tr>
+                <th scope="col" style="width: 20%">IMIĘ</th>
+                <th scope="col" style="width: 30%">NAZWISKO</th>
+                <th scope="col" style="width: 30%">E-MAIL</th>
+                <th scope="col" style="width: auto"><span class="fas fa-pencil"></span></th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider table-light">
+            @foreach (var applicationUser in Model.ApplicationUsers)
+            {
+                <tr>
+                    <td>@applicationUser.FirstName</td>
+                    <td>@applicationUser.LastName</td>
+                    <td>@applicationUser.Email</td>
+                                 
+                    <td>
+                        <button class="btn btn-sm btn-primary"
+                                onclick='window.location.href="@Url.Action("EditApplicationUser", "Home", new { id = applicationUser.Id })"'>
+                            Edytuj
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+

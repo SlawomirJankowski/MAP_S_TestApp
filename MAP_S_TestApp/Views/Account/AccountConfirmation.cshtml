@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Aktywacja konta";
+}
+
+<div class="center-div-parent-container">
+    <div class="center-div-container">
+        <div class="card card-border-top">
+            <h3 class="card-header bg-transparent mt-3 pb-3 text-center">@ViewBag.Title</h3>
+                
+            @if(!string.IsNullOrEmpty(ViewBag.Error))
+            {   
+                <div class="card-body">
+                    <div class="alert alert-warning text-center" role="alert">
+                        <b>Wystąpił błąd. <br /> Twoje konto nie zostało aktywowane.</b><br />
+                         @ViewBag.Error
+                    </div>
+                </div>             
+                <div class="card-footer text-center">
+                    <a class="btn btn-warning" asp-action="Register" asp-controller="Account">Przejdź do rejestracji</a>
+                </div>
+            }
+            else
+            {
+                <div class="card-body">
+                    <div class="alert alert-info text-center" role="alert">
+                            <b>Twoje konto zostało pomyślnie aktywowane.</b><br />
+                            Możesz już się zalogować!
+                    </div>
+                </div>
+
+                <div class="card-footer text-center">
+                    <a class="btn btn-info" asp-action="Login" asp-controller="Account">Przejdź do logowania</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>

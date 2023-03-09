@@ -1,0 +1,61 @@
+﻿@model MAP_S_TestApp.Models.ViewModels.LoginUserViewModel
+
+@{
+    ViewData["Title"] = "Logowanie";
+}
+
+<div class="center-div-parent-container">
+    <div class="center-div-container">
+        <div class="card card-border-top">
+            <h3 class="card-header bg-transparent mt-3 pb-3 text-center">@ViewBag.Title</h3>
+            <div class="card-body">
+                @if (string.IsNullOrEmpty(ViewBag.Error))
+                {
+                    <p class="card-text text-center text-info fs-5">Zaloguj się na swoje konto</p>
+                }
+                else
+                {
+                    <div class="alert alert-primary my-2 text-center">
+                        <strong>@ViewBag.Error</strong>
+                    </div>
+                }
+
+                <form method="post">
+
+                    <div class="input-group mt-3">
+                        <input asp-for="Email" class="form-control" type="text" placeholder="E-mail" />
+                        <span class="input-group-text">
+                            <span class="fas fa-envelope bigger-icon"></span>
+                        </span>
+                    </div>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+
+                    <div class="input-group mt-3">
+                        <input asp-for="Password" class="form-control" type="password" placeholder="Hasło" />
+                        <span class="input-group-text">
+                            <span class="fas fa-lock bigger-icon"></span>
+                        </span>
+                    </div>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+
+                    <div class="row">
+                        <div class="text-center mt-5 mb-4">
+                            <button type="submit" class="btn btn-primary btn-block">Zaloguj</button>
+                        </div>
+                    </div>
+
+                </form>
+                <div class="">
+                    <a asp-asp-controller="Account" asp-action="Register" class="text-center text-info mt-5">
+                        Nie masz jeszcze konta? - Zarejestruj się !
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
