@@ -1,0 +1,57 @@
+﻿@model MAP_S_TestApp.Models.Domains.ApplicationUser
+@{
+    ViewData["Title"] = "Edycja danych użytkownika";
+}
+
+<div class="center-div-parent-container">
+    <div class="center-div-container">
+        <div class="card card-border-top">
+            <h3 class="card-header bg-transparent mt-3 pb-3 text-center">@ViewBag.Title</h3>
+            <div class="card-body">
+
+                <form method="post">
+                     
+                    <div>
+                        <input asp-for="Id" class="form-control" type="hidden" />
+                    </div>
+
+                    <div class="input-group mt-3">
+                        <input asp-for="FirstName" class="form-control" type="text" placeholder="Imię" />
+                        <span class="input-group-text">
+                            <span class="fas fa-user bigger-icon"></span>
+                        </span>
+                    </div>
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+
+                    <div class="input-group mt-3">
+                        <input asp-for="LastName" class="form-control" type="text" placeholder="Nazwisko" />
+                        <span class="input-group-text">
+                            <span class="fas fa-user bigger-icon"></span>
+                        </span>
+                    </div>
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+
+                     <div class="input-group mt-3">
+                        <input asp-for="Email" class="form-control" type="text" placeholder="E-mail" />
+                        <span class="input-group-text">
+                            <span class="fas fa-envelope bigger-icon"></span>
+                        </span>
+                    </div>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                    
+                    <div class="row">
+                        <div class="text-center mt-5 mb-4">
+                            <button type="submit" class="btn btn-primary btn-block">Zatwierdź</button>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

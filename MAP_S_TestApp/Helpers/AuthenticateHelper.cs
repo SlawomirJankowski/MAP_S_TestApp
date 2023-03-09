@@ -17,4 +17,5 @@ public static class AuthenticateHelper
 
         return new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
     }
+
 }

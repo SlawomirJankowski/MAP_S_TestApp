@@ -45,4 +45,19 @@ public class ApplicationUserRepository
     {
         return await _context.ApplicationUsers.ToListAsync();
     }
+
+    public async Task<ApplicationUser> GetUserByIdAsync(int applicationUserId)
+    {
+        return await _context.ApplicationUsers.FirstAsync(x => x.Id == applicationUserId);
+    }
+
+    public async Task UpdateApplicationUserAsync(ApplicationUser updatedApplicationUser)
+    {
+        var applicationUserToUpdate = _context.ApplicationUsers.Single(x => x.Id == updatedApplicationUser.Id);
+        applicationUserToUpdate.FirstName = updatedApplicationUser.FirstName;
+        applicationUserToUpdate.LastName = updatedApplicationUser.LastName;
+        applicationUserToUpdate.Email = updatedApplicationUser.Email;
+        _context.ApplicationUsers.Update(applicationUserToUpdate);
+        await _context.SaveChangesAsync();
+    }
 }

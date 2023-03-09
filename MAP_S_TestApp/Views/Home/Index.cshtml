@@ -4,7 +4,7 @@
 }
 
 <div class="text-start">
-    <h1 class="display-4">Lista użytkowników</h1>
+    <h1 class="display-4">@ViewBag.Title</h1>
     <hr />
 </div>
 <div>
@@ -27,7 +27,7 @@
                                  
                     <td>
                         <button class="btn btn-sm btn-primary"
-                                onclick='window.location.href="@Url.Action("EditApplicationUser", "Home", new { id = applicationUser.Id })"'>
+                                onclick='window.location.href="@Url.Action("EditApplicationUser", "Home", new { applicationUserId = applicationUser.Id })"'>
                             Edytuj
                         </button>
                     </td>

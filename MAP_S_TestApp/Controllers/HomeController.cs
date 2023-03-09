@@ -1,5 +1,7 @@
 ﻿using MAP_S_TestApp.Data;
+using MAP_S_TestApp.Helpers;
 using MAP_S_TestApp.Models;
+using MAP_S_TestApp.Models.Domains;
 using MAP_S_TestApp.Models.ViewModels;
 using MAP_S_TestApp.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -22,13 +24,52 @@ namespace MAP_S_TestApp.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            var claims = this.User.Claims.ToList();
-            ViewBag.UserName = $"{claims[1].Value} {claims[2].Value}";
+            ViewBag.UserName = GetLoggedUserName();
             var vm = new AllApplicationUsersViewModel
             {
                 ApplicationUsers = await _applicationUserRepository.GetAllUsersAsync(),
             };
             return View(vm);
+        }
+
+        public async Task<IActionResult> EditApplicationUser(int applicationUserId)
+        {
+            ViewBag.UserName = GetLoggedUserName();
+            var applicationUser = await _applicationUserRepository.GetUserByIdAsync(applicationUserId);
+            return View(applicationUser);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditApplicationUser(ApplicationUser applicationUserModel)
+        {
+            ViewBag.UserName = GetLoggedUserName();
+            if (!ModelState.IsValid)
+                return View("Register", applicationUserModel);
+
+            if (_applicationUserRepository.EmailAlreadyExists(applicationUserModel.Email))
+            {
+                ViewBag.Error = "Podany adres e-mail jest już używany.\nWprowadź inny adres e-mail.";
+                return View();
+            }
+                      
+            var updatedApplicationUser = new ApplicationUser
+            {
+                Id = applicationUserModel.Id,
+                FirstName = applicationUserModel.FirstName,
+                LastName = applicationUserModel.LastName,
+                Email = applicationUserModel.Email,
+            };
+
+            await _applicationUserRepository.UpdateApplicationUserAsync(updatedApplicationUser);
+
+            return RedirectToAction("Index", "Home");
+        }
+
+
+        private string GetLoggedUserName()
+        {
+            var claims = this.User.Claims.ToList();
+            return $"{claims[1].Value} {claims[2].Value}";
         }
 
 
