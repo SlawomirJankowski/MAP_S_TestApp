@@ -11,8 +11,8 @@ public class EmailHelper
     private readonly string _hostSmtp = "smtp.gmail.com";
     private readonly bool _enableSsl = true;
     private readonly int _port = 587;
-    private readonly string _senderEmail = "EMAIL";
-    private readonly string _senderEmailPassword = "PASSWORD";
+    private readonly string _senderEmail = "sjankowski903@gmail.com"; //"EMAIL";
+    private readonly string _senderEmailPassword = "vfgslujcpqfimjva";// "PASSWORD";
     private readonly string _senderName = "MAP_S_TestApp";
 
     private static string GenerateActivationMessage(string firstName, string lastName, string link)

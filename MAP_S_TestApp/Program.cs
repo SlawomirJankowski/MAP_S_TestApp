@@ -1,5 +1,6 @@
 global using Microsoft.EntityFrameworkCore;
 using MAP_S_TestApp.Data;
+using MAP_S_TestApp.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 
@@ -8,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+
+builder.Services.AddScoped<ApplicationUserService , ApplicationUserService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>

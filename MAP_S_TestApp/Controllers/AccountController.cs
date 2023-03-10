@@ -1,26 +1,23 @@
-﻿using MAP_S_TestApp.Data;
-using MAP_S_TestApp.Helpers;
+﻿using MAP_S_TestApp.Helpers;
 using MAP_S_TestApp.Models.Domains;
 using MAP_S_TestApp.Models.ViewModels;
-using MAP_S_TestApp.Repositories;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using MAP_S_TestApp.Services;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
 
 namespace MAP_S_TestApp.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private readonly ApplicationUserRepository _applicationUserRepository;
-        public AccountController(ApplicationDbContext context)
+        private readonly ApplicationUserService _applicationUserService;
+
+        public AccountController(ApplicationUserService applicationUserService)
         {
-            _context = context;
-            _applicationUserRepository = new ApplicationUserRepository(context);
+            _applicationUserService = applicationUserService;
         }
-             
 
         public IActionResult Register() 
         {
@@ -33,33 +30,32 @@ namespace MAP_S_TestApp.Controllers
             if (!ModelState.IsValid)
                 return View("Register", registerUserModel);
 
-            if (_applicationUserRepository.EmailAlreadyExists(registerUserModel.Email))
+            if (_applicationUserService.EmailAlreadyExists(registerUserModel.Email))
             {
                 ViewBag.Error = "Podany adres e-mail jest już używany.\nWprowadź inny adres e-mail.";
                 return View();
             }
 
-            PasswordHelper.CreatePasswordHash(
-                registerUserModel.Password, out byte[] passwordHash, out byte[] passwordSalt);
+            //PasswordHelper.CreatePasswordHash(
+            //    registerUserModel.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
-            var applicationUser = new ApplicationUser
-            {
-                FirstName = registerUserModel.FirstName,
-                LastName = registerUserModel.LastName,
-                Email = registerUserModel.Email,
-                PasswordHash = passwordHash,
-                PasswordSalt = passwordSalt,
-                CreatedAt = DateTime.UtcNow,
-                VerificationToken = PasswordHelper.CreateVerificationToken()
-            };
+            //var applicationUser = new ApplicationUser
+            //{
+            //    FirstName = registerUserModel.FirstName,
+            //    LastName = registerUserModel.LastName,
+            //    Email = registerUserModel.Email,
+            //    PasswordHash = passwordHash,
+            //    PasswordSalt = passwordSalt,
+            //    CreatedAt = DateTime.UtcNow,
+            //    VerificationToken = PasswordHelper.CreateVerificationToken()
+            //};
 
-            await _applicationUserRepository.AddUserAsync(applicationUser);
+            await _applicationUserService.AddUserAsync(registerUserModel, this.HttpContext);
 
-            //TODO: sent confirmation email
-            var link = Url.ActionLink("AccountConfirmation", "Account", new { applicationUserId = applicationUser.Id, verificationToken = applicationUser.VerificationToken }, Request.Scheme, Request.Host.ToString());
+            //var link = Url.ActionLink("AccountConfirmation", "Account", new { applicationUserId = applicationUser.Id, verificationToken = applicationUser.VerificationToken }, Request.Scheme, Request.Host.ToString());
 
-            var emailSender = new EmailHelper();
-            await emailSender.SendActivationLink(link, applicationUser.FirstName, applicationUser.LastName, applicationUser.Email);
+            //var emailSender = new EmailHelper();
+            //await emailSender.SendActivationLink(link, applicationUser.FirstName, applicationUser.LastName, applicationUser.Email);
             
             return RedirectToAction("RegisterConfirmation");
         }
@@ -75,7 +71,7 @@ namespace MAP_S_TestApp.Controllers
             if (!ModelState.IsValid)
                 return View("Login", loginUserModel);
 
-            var applicationUser = await _applicationUserRepository.GetUserByEmailAsync(loginUserModel.Email);
+            var applicationUser = await _applicationUserService.GetUserByEmailAsync(loginUserModel.Email);
 
             if (applicationUser == null)
             {
@@ -107,7 +103,7 @@ namespace MAP_S_TestApp.Controllers
 
         public async Task<IActionResult> AccountConfirmation(int applicationUserId, string verificationToken)
         {
-            var applicationUser = await _applicationUserRepository.GetUserByIdAndTokenAsync(applicationUserId, verificationToken);
+            var applicationUser = await _applicationUserService.GetUserByIdAndTokenAsync(applicationUserId, verificationToken);
             if (applicationUser == null)
             {
                 ViewBag.Error = "Link aktywacyjny jest niepoprawny. Zarejestruj się ponownie.";
@@ -120,7 +116,7 @@ namespace MAP_S_TestApp.Controllers
                 return View();
             }
 
-            await _applicationUserRepository.SetIsActivatedStatusTrueAsync(applicationUser.Id);
+            await _applicationUserService.SetIsActivatedStatusTrueAsync(applicationUser.Id);
 
             return View();
         }
