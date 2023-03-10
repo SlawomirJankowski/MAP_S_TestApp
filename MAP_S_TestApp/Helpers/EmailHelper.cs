@@ -11,8 +11,8 @@ public class EmailHelper
     private readonly string _hostSmtp = "smtp.gmail.com";
     private readonly bool _enableSsl = true;
     private readonly int _port = 587;
-    private readonly string _senderEmail = "sjankowski903@gmail.com";
-    private readonly string _senderEmailPassword = "vfgslujcpqfimjva";
+    private readonly string _senderEmail = "EMAIL";
+    private readonly string _senderEmailPassword = "PASSWORD";
     private readonly string _senderName = "MAP_S_TestApp";
 
     private static string GenerateActivationMessage(string firstName, string lastName, string link)
@@ -20,7 +20,7 @@ public class EmailHelper
         var activationMessage = new StringBuilder();
         activationMessage.Append($"Witaj {firstName} {lastName},");
         activationMessage.Append("<br /><br />Kliknij proszę w poniższy link aby aktywować swoje konto w aplikacji MAP-S_TestApp:");
-        activationMessage.Append("<br /><a href = '" + link + "'>Kliknij tutaj aby aktywować konto</a>");
+        activationMessage.Append("<br /><a href = '" + link + "'>Link aktywacyjny</a>");
         activationMessage.Append("<br /><br />Dziękujemy");
 
         return activationMessage.ToString();
@@ -32,7 +32,7 @@ public class EmailHelper
         using (var mailMessage = new MailMessage(_senderEmail, userEmail))
         {
             mailMessage.From = new MailAddress(_senderEmail, _senderName);
-            mailMessage.To.Add(new MailAddress(userEmail));
+            mailMessage.To.Add(new MailAddress(userEmail, $"{firstName} {lastName}"));
 
             mailMessage.Subject = "Aktywacja konta - MAP_S_TestApp";
             mailMessage.SubjectEncoding = Encoding.UTF8;
