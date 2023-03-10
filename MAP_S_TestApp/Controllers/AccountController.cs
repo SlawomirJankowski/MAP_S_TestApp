@@ -1,5 +1,4 @@
 ﻿using MAP_S_TestApp.Helpers;
-using MAP_S_TestApp.Models.Domains;
 using MAP_S_TestApp.Models.ViewModels;
 using MAP_S_TestApp.Services;
 using Microsoft.AspNetCore.Authentication;
@@ -36,27 +35,8 @@ namespace MAP_S_TestApp.Controllers
                 return View();
             }
 
-            //PasswordHelper.CreatePasswordHash(
-            //    registerUserModel.Password, out byte[] passwordHash, out byte[] passwordSalt);
-
-            //var applicationUser = new ApplicationUser
-            //{
-            //    FirstName = registerUserModel.FirstName,
-            //    LastName = registerUserModel.LastName,
-            //    Email = registerUserModel.Email,
-            //    PasswordHash = passwordHash,
-            //    PasswordSalt = passwordSalt,
-            //    CreatedAt = DateTime.UtcNow,
-            //    VerificationToken = PasswordHelper.CreateVerificationToken()
-            //};
-
             await _applicationUserService.AddUserAsync(registerUserModel, this.HttpContext);
-
-            //var link = Url.ActionLink("AccountConfirmation", "Account", new { applicationUserId = applicationUser.Id, verificationToken = applicationUser.VerificationToken }, Request.Scheme, Request.Host.ToString());
-
-            //var emailSender = new EmailHelper();
-            //await emailSender.SendActivationLink(link, applicationUser.FirstName, applicationUser.LastName, applicationUser.Email);
-            
+                       
             return RedirectToAction("RegisterConfirmation");
         }
 

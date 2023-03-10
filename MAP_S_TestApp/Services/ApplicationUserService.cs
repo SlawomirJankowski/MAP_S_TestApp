@@ -3,12 +3,11 @@ using MAP_S_TestApp.Helpers;
 using MAP_S_TestApp.Models.Domains;
 using MAP_S_TestApp.Models.ViewModels;
 using MAP_S_TestApp.Repositories;
-using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace MAP_S_TestApp.Services;
 
-public class ApplicationUserService : ControllerBase
+public class ApplicationUserService 
 {
 
     private readonly ApplicationUserRepository _applicationUserRepository;
@@ -91,8 +90,7 @@ public class ApplicationUserService : ControllerBase
 
     private static string GenerateConfirmationLink(ApplicationUser applicationUser, HttpContext httpContext)
     {
-        var link = $"{httpContext.Request.Scheme}://{httpContext.Request.Host}/Account/AccountConfirmation?applicationUserId={applicationUser.Id}&verificationToken={applicationUser.VerificationToken}";
-        return link;
+        return $"{httpContext.Request.Scheme}://{httpContext.Request.Host}/Account/AccountConfirmation?applicationUserId={applicationUser.Id}&verificationToken={applicationUser.VerificationToken}";
     }
 
     public string GetLoggedUserName(ClaimsPrincipal user)
